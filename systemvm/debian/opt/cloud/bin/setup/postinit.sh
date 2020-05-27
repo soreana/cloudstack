@@ -24,6 +24,9 @@ eject || true
 # Restart journald for setting changes to apply
 systemctl restart systemd-journald
 
+# Restart rsyslog
+systemctl restart rsyslog
+
 TYPE=$(grep -Po 'type=\K[a-zA-Z]*' /var/cache/cloud/cmdline)
 if [ "$TYPE" == "router" ] || [ "$TYPE" == "vpcrouter" ] || [ "$TYPE" == "dhcpsrvr" ]
 then
