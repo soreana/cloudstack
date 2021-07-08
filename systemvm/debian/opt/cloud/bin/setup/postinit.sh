@@ -21,11 +21,23 @@
 # Eject cdrom if any
 eject || true
 
+setup_remote_logging(){
+    echo "${REMOTE_LOGGGING_ENABLED,,}"
+    # Remove curent configuration
+    sed -i '/imudp/d' /etc/rsyslog.conf
+    sed -i '/3914/d' /etc/rsyslog.conf
+    if [[ "${REMOTE_LOGGGING_ENABLED,,}" == "true" ]]; then
+        sed -i '/^# provides UDP syslog*/a $ModLoad imudp\n$UDPServerRun 3914' /etc/rsyslog.conf
+    fi
+
+    systemctl restart rsyslog
+}
+
+
 # Restart journald for setting changes to apply
 systemctl restart systemd-journald
 
-# Restart rsyslog
-systemctl restart rsyslog
+setup_remote_logging
 
 TYPE=$(grep -Po 'type=\K[a-zA-Z]*' /var/cache/cloud/cmdline)
 if [ "$TYPE" == "router" ] || [ "$TYPE" == "vpcrouter" ] || [ "$TYPE" == "dhcpsrvr" ]
