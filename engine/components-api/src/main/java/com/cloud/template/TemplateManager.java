@@ -18,7 +18,9 @@ package com.cloud.template;
 
 import java.util.List;
 
+import com.cloud.agent.api.to.DatadiskTO;
 import com.cloud.deploy.DeployDestination;
+import com.cloud.storage.DataStoreRole;
 import org.apache.cloudstack.engine.subsystem.api.storage.DataStore;
 import org.apache.cloudstack.engine.subsystem.api.storage.TemplateInfo;
 import org.apache.cloudstack.framework.config.ConfigKey;
@@ -28,7 +30,6 @@ import com.cloud.dc.DataCenterVO;
 import com.cloud.exception.ResourceAllocationException;
 import com.cloud.exception.StorageUnavailableException;
 import com.cloud.storage.StoragePool;
-import com.cloud.storage.VMTemplateHostVO;
 import com.cloud.storage.VMTemplateStoragePoolVO;
 import com.cloud.storage.VMTemplateVO;
 import com.cloud.utils.Pair;
@@ -100,8 +101,6 @@ public interface TemplateManager {
      */
     void evictTemplateFromStoragePool(VMTemplateStoragePoolVO templatePoolVO);
 
-    boolean templateIsDeleteable(VMTemplateHostVO templateHostRef);
-
     boolean templateIsDeleteable(long templateId);
 
     Pair<String, String> getAbsoluteIsoPath(long templateId, long dataCenterId);
@@ -133,4 +132,5 @@ public interface TemplateManager {
     public static final String MESSAGE_REGISTER_PUBLIC_TEMPLATE_EVENT = "Message.RegisterPublicTemplate.Event";
     public static final String MESSAGE_RESET_TEMPLATE_PERMISSION_EVENT = "Message.ResetTemplatePermission.Event";
 
+    List<DatadiskTO> getTemplateDisksOnImageStore(Long templateId, DataStoreRole role, String configurationId);
 }

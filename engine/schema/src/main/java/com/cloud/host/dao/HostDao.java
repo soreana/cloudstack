@@ -39,6 +39,8 @@ public interface HostDao extends GenericDao<HostVO, Long>, StateDao<Status, Stat
 
     Integer countAllByType(final Host.Type type);
 
+    Integer countAllByTypeInZone(long zoneId, final Host.Type type);
+
     /**
      * Mark all hosts associated with a certain management server
      * as disconnected.
@@ -81,7 +83,20 @@ public interface HostDao extends GenericDao<HostVO, Long>, StateDao<Status, Stat
 
     List<HostVO> findByClusterId(Long clusterId);
 
+    /**
+     * Returns hosts that are 'Up' and 'Enabled' from the given Data Center/Zone
+     */
     List<HostVO> listByDataCenterId(long id);
+
+    /**
+     * Returns hosts that are from the given Data Center/Zone and at a given state (e.g. Creating, Enabled, Disabled, etc).
+     */
+    List<HostVO> listByDataCenterIdAndState(long id, ResourceState state);
+
+    /**
+     * Returns hosts that are 'Up' and 'Disabled' from the given Data Center/Zone
+     */
+    List<HostVO> listDisabledByDataCenterId(long id);
 
     List<HostVO> listByDataCenterIdAndHypervisorType(long zoneId, Hypervisor.HypervisorType hypervisorType);
 
@@ -121,4 +136,6 @@ public interface HostDao extends GenericDao<HostVO, Long>, StateDao<Status, Stat
     List<HostVO> listByHostCapability(Host.Type type, Long clusterId, Long podId, long dcId, String hostCapabilty);
 
     List<HostVO> listByClusterAndHypervisorType(long clusterId, HypervisorType hypervisorType);
+
+    HostVO findByName(String name);
 }

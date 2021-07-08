@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cloud.offering.ServiceOffering;
+import com.cloud.template.VirtualMachineTemplate;
 import org.apache.cloudstack.api.BaseCmd.HTTPMethod;
 import org.apache.cloudstack.framework.config.ConfigKey;
 
@@ -86,7 +88,7 @@ public interface UserVmManager extends UserVmService {
 
     HashMap<Long, List<VmDiskStatsEntry>> getVmDiskStatistics(long hostId, String hostName, List<Long> vmIds);
 
-    HashMap<String, VolumeStatsEntry> getVolumeStatistics(long clusterId, String poolUuid, StoragePoolType poolType, List<String> volumeLocator, int timout);
+    HashMap<String, VolumeStatsEntry> getVolumeStatistics(long clusterId, String poolUuid, StoragePoolType poolType, int timout);
 
     boolean deleteVmGroup(long groupId);
 
@@ -95,6 +97,8 @@ public interface UserVmManager extends UserVmService {
     InstanceGroupVO getGroupForVm(long vmId);
 
     void removeInstanceFromInstanceGroup(long vmId);
+
+    boolean isVMUsingLocalStorage(VMInstanceVO vm);
 
     boolean expunge(UserVmVO vm, long callerUserId, Account caller);
 
@@ -122,4 +126,7 @@ public interface UserVmManager extends UserVmService {
     void persistDeviceBusInfo(UserVmVO paramUserVmVO, String paramString);
 
     HashMap<Long, List<VmNetworkStatsEntry>> getVmNetworkStatistics(long hostId, String hostName, List<Long> vmIds);
+
+    boolean checkIfDynamicScalingCanBeEnabled(VirtualMachine vm, ServiceOffering offering, VirtualMachineTemplate template, Long zoneId);
+
 }
