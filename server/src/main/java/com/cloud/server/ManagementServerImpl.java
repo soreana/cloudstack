@@ -717,6 +717,11 @@ public class ManagementServerImpl extends ManagerBase implements ManagementServe
 
     static final ConfigKey<Integer> vmPasswordLength = new ConfigKey<Integer>("Advanced", Integer.class, "vm.password.length", "6", "Specifies the length of a randomly generated password", false);
     static final ConfigKey<Integer> sshKeyLength = new ConfigKey<Integer>("Advanced", Integer.class, "ssh.key.length", "2048", "Specifies custom SSH key length (bit)", true, ConfigKey.Scope.Global);
+
+    // TODO decide about being public of private
+    public static final ConfigKey<Boolean> systemVmRemoteLoggingEnabled = new ConfigKey<>("systemvm.remote.logging.enabled", Boolean.class, "Advanced", "false",
+                        "If true, it will forward system vm logs to management server", false, ConfigKey.Scope.Global);
+
     @Inject
     public AccountManager _accountMgr;
     @Inject
@@ -3171,7 +3176,7 @@ public class ManagementServerImpl extends ManagerBase implements ManagementServe
 
     @Override
     public ConfigKey<?>[] getConfigKeys() {
-        return new ConfigKey<?>[] {vmPasswordLength, sshKeyLength};
+        return new ConfigKey<?>[] {vmPasswordLength, sshKeyLength, systemVmRemoteLoggingEnabled};
     }
 
     protected class EventPurgeTask extends ManagedContextRunnable {
