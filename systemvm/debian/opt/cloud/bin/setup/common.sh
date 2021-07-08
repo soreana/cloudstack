@@ -696,6 +696,9 @@ parse_cmd_line() {
         name)
             export NAME=$VALUE
             ;;
+        remoteloggingenabled)
+            export REMOTE_LOGGGING_ENABLED=$VALUE
+            ;;
         dhcprange)
             export DHCP_RANGE=$(echo $VALUE | tr ':' ',')
             ;;

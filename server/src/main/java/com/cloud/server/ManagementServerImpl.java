@@ -748,6 +748,10 @@ public class ManagementServerImpl extends ManagerBase implements ManagementServe
     static final ConfigKey<Boolean> humanReadableSizes = new ConfigKey<Boolean>("Advanced", Boolean.class, "display.human.readable.sizes", "true", "Enables outputting human readable byte sizes to logs and usage records.", false, ConfigKey.Scope.Global);
     public static final ConfigKey<String> customCsIdentifier = new ConfigKey<String>("Advanced", String.class, "custom.cs.identifier", UUID.randomUUID().toString().split("-")[0].substring(4), "Custom identifier for the cloudstack installation", true, ConfigKey.Scope.Global);
 
+    // TODO decide about being public of private
+    public static final ConfigKey<Boolean> systemVmRemoteLoggingEnabled = new ConfigKey<>("systemvm.remote.logging.enabled", Boolean.class, "Advanced", "false",
+                        "If true, it will forward system vm logs to management server", false, ConfigKey.Scope.Global);
+
     @Inject
     public AccountManager _accountMgr;
     @Inject
@@ -3457,7 +3461,7 @@ public class ManagementServerImpl extends ManagerBase implements ManagementServe
 
     @Override
     public ConfigKey<?>[] getConfigKeys() {
-        return new ConfigKey<?>[] {vmPasswordLength, sshKeyLength, humanReadableSizes, customCsIdentifier};
+        return new ConfigKey<?>[] {vmPasswordLength, sshKeyLength, humanReadableSizes, customCsIdentifier, systemVmRemoteLoggingEnabled};
     }
 
     protected class EventPurgeTask extends ManagedContextRunnable {

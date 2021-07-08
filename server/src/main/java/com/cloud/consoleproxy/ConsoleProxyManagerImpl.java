@@ -29,6 +29,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.naming.ConfigurationException;
 
+import com.cloud.server.ManagementServerImpl;
 import org.apache.cloudstack.agent.lb.IndirectAgentLB;
 import org.apache.cloudstack.context.CallContext;
 import org.apache.cloudstack.engine.orchestration.service.NetworkOrchestrationService;
@@ -1381,6 +1382,8 @@ public class ConsoleProxyManagerImpl extends ManagerBase implements ConsoleProxy
         }
         buf.append(" zone=").append(dest.getDataCenter().getId());
         buf.append(" pod=").append(dest.getPod().getId());
+        buf.append(" remoteloggingenabled=").append(ManagementServerImpl.systemVmRemoteLoggingEnabled.value());
+
         buf.append(" guid=Proxy.").append(profile.getId());
         buf.append(" proxy_vm=").append(profile.getId());
         if (_disableRpFilter) {
