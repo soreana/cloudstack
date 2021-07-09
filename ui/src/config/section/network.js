@@ -48,7 +48,7 @@ export default {
       }, {
         name: 'public.ip.addresses',
         component: () => import('@/views/network/IpAddressesTab.vue'),
-        show: (record) => { return record.type === 'Isolated' && !('vpcid' in record) && 'listPublicIpAddresses' in store.getters.apis }
+        show: (record) => { return (record.type === 'Isolated' || record.type === 'Shared') && !('vpcid' in record) && 'listPublicIpAddresses' in store.getters.apis }
       }, {
         name: 'virtual.routers',
         component: () => import('@/views/network/RoutersTab.vue'),
@@ -85,6 +85,7 @@ export default {
           api: 'restartNetwork',
           icon: 'sync',
           label: 'label.restart.network',
+          message: 'message.restart.network',
           dataView: true,
           args: ['cleanup'],
           show: (record) => record.type !== 'L2'
@@ -165,7 +166,7 @@ export default {
           api: 'restartVPC',
           icon: 'sync',
           label: 'label.restart.vpc',
-          message: 'message.restart.vpc',
+          message: (record) => { return record.redundantvpcrouter ? 'message.restart.vpc' : 'message.restart.vpc.remark' },
           dataView: true,
           args: (record) => {
             var fields = ['cleanup']
@@ -406,7 +407,7 @@ export default {
       hidden: true,
       permission: ['listVpnConnections'],
       columns: ['publicip', 'state', 'gateway', 'ipsecpsk', 'ikepolicy', 'esppolicy'],
-      details: ['publicip', 'gateway', 'passive', 'cidrlist', 'ipsecpsk', 'ikepolicy', 'esppolicy', 'ikelifetime', 'esplifetime', 'dpd', 'forceencap', 'created'],
+      details: ['publicip', 'gateway', 'passive', 'cidrlist', 'ipsecpsk', 'ikepolicy', 'esppolicy', 'ikelifetime', 'ikeversion', 'esplifetime', 'dpd', 'splitconnections', 'forceencap', 'created'],
       actions: [
         {
           api: 'createVpnConnection',
@@ -592,7 +593,7 @@ export default {
       icon: 'lock',
       permission: ['listVpnCustomerGateways'],
       columns: ['name', 'gateway', 'cidrlist', 'ipsecpsk', 'account'],
-      details: ['name', 'id', 'gateway', 'cidrlist', 'ipsecpsk', 'ikepolicy', 'ikelifetime', 'esppolicy', 'esplifetime', 'dpd', 'forceencap', 'account', 'domain'],
+      details: ['name', 'id', 'gateway', 'cidrlist', 'ipsecpsk', 'ikepolicy', 'ikelifetime', 'ikeversion', 'esppolicy', 'esplifetime', 'dpd', 'splitconnections', 'forceencap', 'account', 'domain'],
       searchFilters: ['keyword', 'domainid', 'account'],
       actions: [
         {
@@ -610,7 +611,12 @@ export default {
           label: 'label.edit',
           docHelp: 'adminguide/networking_and_traffic.html#updating-and-removing-a-vpn-customer-gateway',
           dataView: true,
-          args: ['name', 'gateway', 'cidrlist', 'ipsecpsk', 'ikepolicy', 'ikelifetime', 'esppolicy', 'esplifetime', 'dpd', 'forceencap']
+          args: ['name', 'gateway', 'cidrlist', 'ipsecpsk', 'ikepolicy', 'ikelifetime', 'ikeversion', 'esppolicy', 'esplifetime', 'dpd', 'splitconnections', 'forceencap'],
+          mapping: {
+            ikeversion: {
+              options: ['ike', 'ikev1', 'ikev2']
+            }
+          }
         },
         {
           api: 'deleteVpnCustomerGateway',
